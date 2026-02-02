@@ -6,10 +6,47 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  output   = "../generated"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Game {
+  id      String       @id @default(cuid())
+  status  GameStatus
+  players GamePlayer[] @relation("players")
+  field   Json?
+
+  winner     GamePlayer? @relation(fields: [winnerId], references: [id])
+  winnerId   String?
+  gameOverAt String?
+}
+
+enum GameStatus {
+  idle
+  inProgress
+  gameOver
+  gameOverDraw
+}
+
+model GamePlayer {
+  id     String @id @default(cuid())
+  gameId String
+  game   Game   @relation("players", fields: [gameId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  index  Int
+  Game   Game[]
+}
+
+model User {
+  id           String       @id @default(cuid())
+  login        String
+  rating       Int
+  passwordHash String
+  salt         String       @default("")
+  players      GamePlayer[]
 }
