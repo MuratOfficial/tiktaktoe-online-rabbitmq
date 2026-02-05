@@ -1,5 +1,7 @@
-// import { GameId, UserId } from "@/kernel/ids";
-// import { left, right } from "@/shared/lib/either";
+
+import { left, right } from "@/shared/lib/either";
+
+import { GameId, UserId } from "@/kernel/ids";
 
 export type GameEntity =
   | GameIdleEntity
@@ -8,21 +10,21 @@ export type GameEntity =
   | GameOverDrawEntity;
 
 export type GameIdleEntity = {
-//   id: GameId;
+  id: GameId;
   creator: PlayerEntity;
   field: Field;
   status: "idle";
 };
 
 export type GameInProgressEntity = {
-//   id: GameId;
+  id: GameId;
   players: PlayerEntity[];
   field: Field;
   status: "inProgress";
 };
 
 export type GameOverEntity = {
-//   id: GameId;
+  id: GameId;
   players: PlayerEntity[];
   field: Field;
   status: "gameOver";
@@ -30,14 +32,14 @@ export type GameOverEntity = {
 };
 
 export type GameOverDrawEntity = {
-//   id: GameId;
+  id: GameId;
   players: PlayerEntity[];
   field: Field;
   status: "gameOverDraw";
 };
 
 export type PlayerEntity = {
-//   id: UserId;
+  id: UserId;
   login: string;
   rating: number;
 };
@@ -65,60 +67,60 @@ export const getNextSymbol = (sameSymbol: GameSymbol) => {
   return GameSymbol.X;
 };
 
-// export const getPlayerSymbol = (
-//   player: PlayerEntity,
-//   game: GameInProgressEntity | GameOverEntity,
-// ) => {
-//   const index = game.players.findIndex((p) => p.id === player.id);
+export const getPlayerSymbol = (
+  player: PlayerEntity,
+  game: GameInProgressEntity | GameOverEntity,
+) => {
+  const index = game.players.findIndex((p) => p.id === player.id);
 
-//   return { 0: GameSymbol.X, 1: GameSymbol.O }[index];
-// };
+  return { 0: GameSymbol.X, 1: GameSymbol.O }[index];
+};
 
-// export const doStep = ({
-//   game,
-//   index,
-//   player,
-// }: {
-//   game: GameInProgressEntity;
-//   index: number;
-//   player: PlayerEntity;
-// }) => {
-//   const currentSymbol = getGameCurrentSymbol(game);
+export const doStep = ({
+  game,
+  index,
+  player,
+}: {
+  game: GameInProgressEntity;
+  index: number;
+  player: PlayerEntity;
+}) => {
+  const currentSymbol = getGameCurrentSymbol(game);
 
-//   if (currentSymbol !== getPlayerSymbol(player, game)) {
-//     return left("not-player-symbol");
-//   }
+  if (currentSymbol !== getPlayerSymbol(player, game)) {
+    return left("not-player-symbol");
+  }
 
-//   if (game.field[index]) {
-//     return left("game-cell-allready-has-symbol");
-//   }
+  if (game.field[index]) {
+    return left("game-cell-allready-has-symbol");
+  }
 
-//   const newField = game.field.map((cell, i) =>
-//     i === index ? currentSymbol : cell,
-//   );
+  const newField = game.field.map((cell, i) =>
+    i === index ? currentSymbol : cell,
+  );
 
-//   if (calculateWinner(newField)) {
-//     return right({
-//       ...game,
-//       field: newField,
-//       winner: player,
-//       status: "gameOver",
-//     } satisfies GameOverEntity);
-//   }
+  if (calculateWinner(newField)) {
+    return right({
+      ...game,
+      field: newField,
+      winner: player,
+      status: "gameOver",
+    } satisfies GameOverEntity);
+  }
 
-//   if (isDraw(newField)) {
-//     return right({
-//       ...game,
-//       field: newField,
-//       status: "gameOverDraw",
-//     } satisfies GameOverDrawEntity);
-//   }
+  if (isDraw(newField)) {
+    return right({
+      ...game,
+      field: newField,
+      status: "gameOverDraw",
+    } satisfies GameOverDrawEntity);
+  }
 
-//   return right({
-//     ...game,
-//     field: newField,
-//   } satisfies GameInProgressEntity);
-// };
+  return right({
+    ...game,
+    field: newField,
+  } satisfies GameInProgressEntity);
+};
 
 function isDraw(squares: Field) {
   const winner = calculateWinner(squares);

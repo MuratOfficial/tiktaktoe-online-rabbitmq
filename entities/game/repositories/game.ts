@@ -3,6 +3,7 @@ import { Game, GamePlayer, Prisma, User } from "@/generated/client";
 import { z } from "zod";
 import { GameEntity, GameIdleEntity, GameInProgressEntity, GameOverDrawEntity, GameOverEntity, PlayerEntity } from "../domain";
 import prisma from "@/shared/lib/db";
+import { GameId } from "@/kernel/ids";
 
 const gameInclude = {
   winner: { include: { user: true } },
