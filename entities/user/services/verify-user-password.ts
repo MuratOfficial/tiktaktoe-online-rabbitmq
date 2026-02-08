@@ -12,7 +12,7 @@ export async function verifyUserPassword({
   const user = await userRepository.getUser({ login });
 
   if (!user) {
-    return left("wron-login-or-password" as const);
+    return left("wrong-login-or-password" as const);
   }
 
   const isCompare = await passwordService.comparePasswords({
@@ -22,7 +22,7 @@ export async function verifyUserPassword({
   });
 
   if (!isCompare) {
-    return left("wron-login-or-password" as const);
+    return left("wrong-login-or-password" as const);
   }
 
   return right(user);

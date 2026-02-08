@@ -44,7 +44,7 @@ model GamePlayer {
 
 model User {
   id           String       @id @default(cuid())
-  login        String
+  login        String       @unique
   rating       Int
   passwordHash String
   salt         String       @default("")

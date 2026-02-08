@@ -48,7 +48,7 @@ export const signInAction = async (
   }
 
   const errors = {
-    "wron-login-or-password": "Неверный логин или пароль",
+    "wrong-login-or-password": "Неверный логин или пароль",
   }[verifyUserResult.error];
 
   return {
