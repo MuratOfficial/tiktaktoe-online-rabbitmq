@@ -12,15 +12,15 @@ services:
     volumes:
       - main-db:/var/lib/postgresql/data
   rabbitmq:
-    image: rabbitmq
-    command: rabbitmq-server
+    image: rabbitmq:3-management
     ports:
       - 5672:5672
-    expose:
-      - "5672"
-      - "15672"
+      - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "5672"]
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
       interval: 10s
       timeout: 10s
       retries: 5
